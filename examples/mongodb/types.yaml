@@ -52,8 +52,8 @@ node_types:
         default: 8
         required: true
     capabilities:
-      host:
-        type: org.ystia.mongodb.pub.capabilities.Container.MongoDB
+      mongo_db:
+        type: tosca.capabilities.Endpoint.Database
     interfaces:
       Standard:
         create:
@@ -67,6 +67,3 @@ node_types:
             MONGODB_QUOTA_MAXFILES: { get_property: [SELF, quota_maxfiles] }
           implementation: playbooks/mongodb_install.yaml
 
-capability_types:
-  org.ystia.mongodb.pub.capabilities.Container.MongoDB:
-    derived_from: tosca.capabilities.Container

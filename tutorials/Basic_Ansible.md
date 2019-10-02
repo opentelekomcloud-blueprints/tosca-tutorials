@@ -21,11 +21,15 @@ node_types:
 
 Notice:
 * We use the `HOST` keyword to get information of the compute node, on which the mongodb node is hosted.
-* The compute node has the following attributes by default: `private_address`, `public_address`
-* We use `get_attribute` to get the attribute `private_address` of the hosted compute node.
+* The compute node has the following attributes to use by default: `private_address`, `public_address` (Figure 1).
+* We use `get_attribute` to get the attribute `private_address` of the hosted compute node at runtime.
 
-The ansible script `mongodb_install.yaml` imports an ansible role `undergreen.ansible-role-mongodb` and use it to install 
-a mongodb as follows:
+![](../images/compute_attributes.png "Compute attributes")
+
+Figure 1: Attributes of a compute node.
+
+The ansible script `mongodb_install.yaml` imports an ansible role `undergreen.ansible-role-mongodb` and uses it to
+install a mongodb as follows:
 
 ```yaml
 # playbooks/mongodb_install.yaml
@@ -44,7 +48,7 @@ a mongodb as follows:
         ...
 ```
 
-Here, the environment variable `IP_ADDRESS` and `MONGODB_PORT` are the `inputs` param of the `create` interface.
+Here, the environment variables `IP_ADDRESS` and `MONGODB_PORT` are the `inputs` parameters of the `create` interface.
 
 #### Where to go from here?
 
