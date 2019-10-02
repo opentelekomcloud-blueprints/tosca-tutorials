@@ -15,14 +15,14 @@ node_types:
             # HOST is the keyword to get more information about the hosted compute node at runtime
             IP_ADDRESS: { get_attribute: [HOST, private_address] }
             MONGODB_PORT: { get_property: [SELF, port] }
+          # ansible script
           implementation: playbooks/mongodb_install.yaml
 ```
 
-Notice: 
-* We use the `SELF` keyword to get information of the node itself (e.g., the property `port` of the current node mongodb).
-* We use the `HOST` keyword to get information of the compute node, on which our mongodb node is hosted.
-* To get user input property of a node, use `get_property`.
-* To get runtime output value of a node, use `get_attribute`.
+Notice:
+* We use the `HOST` keyword to get information of the compute node, on which the mongodb node is hosted.
+* The compute node has the following attributes by default: `private_address`, `public_address`
+* We use `get_attribute` to get the attribute `private_address` of the hosted compute node.
 
 The ansible script `mongodb_install.yaml` imports an ansible role `undergreen.ansible-role-mongodb` and use it to install 
 a mongodb as follows:

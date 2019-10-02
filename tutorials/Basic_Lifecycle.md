@@ -83,10 +83,11 @@ the input variable `msp`, which value is set from the property `hello_message` o
 ```
 
 Notice: 
-* We use the `SELF` keyword to get information of the node itself (e.g., the property `hello_message` of the current 
-python node).
+* We use the `SELF` keyword to reference to the current node itself.
+* We use `get_property` to get the property `hello_message` of the current node.
 
-The input param `msp` of the `start` interface is available as an environment variable in the script `start.py`:
+In the example, the input param `msp` of the `start` interface is available as an environment variable in the script 
+`start.py` as follows:
 
 ```python
 # scripts/start.py
@@ -94,11 +95,13 @@ print(msg)
 ```
 
 Notice:
-* TOSCA supports the following scripts: python, shell script, ansible.
+* During the deployment, the orchestrator takes care of sending the `implementation` script to the target compute node
+and apply it.
+* TOSCA supports the following implementation scripts: python, shell script, ansible.
 
 #### Step 5. Define the output value
 
-We can define the runtime output for our python component by defining the `attributes`:
+We can define the output result for our python component as follows:
 
 ```yaml
     interfaces:
@@ -111,9 +114,13 @@ We can define the runtime output for our python component by defining the `attri
       resolvedOutput1: { get_operation_output: [SELF, Standard, create, myVar1]}
 ```
 
-In the above example, the python node outputs the attribute `resolvedOutput1`. It is set from the environment variable 
-`myVar1` of the `create` interface. In particular, `myVar1` is an environment variable in the python script of the 
-`create` interface:
+Notice:
+* We use `attributes` to define output result of the python node.
+* We use `get_operation_output` to get output from an interface implementation.
+
+In this example, the python node outputs `resolvedOutput1`. Its value is set from the variable `myVar1` of the `create` 
+interface. In particular, `myVar1` is an environment variable set in the python script of the `create` interface as 
+follows:
 
 ```python
 # scripts/create.py
