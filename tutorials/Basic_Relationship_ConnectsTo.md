@@ -2,14 +2,14 @@
 
 This example shows how to define a nodecellar connects to a mongodb as in Figure 1.
 
-![](../images/1_python.png "Python")
+![](../images/nodecella_mongodb.png "Python")
 
-Figure 1
+Figure 1: A topology with nodecellar connects to mongodb on a compute node.
 
 We have 3 steps to define a `ConnectsTo` relationship from nodecellar (a `SOURCE` node) to mongodb (a `TARGET` node) as
 follows:
 
-#### Step 1. Define a capability in the TARGET node (mongodb)
+#### Step 1. Define an endpoint capability in the TARGET node (mongodb)
 
 First, we define a new capability name `mongo_db` from type `tosca.capabilities.Endpoint.Database`:
 
@@ -24,17 +24,23 @@ node_types:
         type: tosca.capabilities.Endpoint.Database
 ```
 
-The `Endpoint` capability is where a `SOURCE` node gets information about the `TARGET` node to setup the connection
-later on. The `Endpoint` capability is a TOSCA type with some default properties and attributes as in Figure 2:
+The capability `mongo_db` contains endpoint information for a `SOURCE` node to setup the connection later on (more 
+details in step 3).
+
+The capability `mongo_db` willl show in the editor as in Figure 2:
 
 ![](../images/database_capability.png "Capability")
 
-Figure 2: The tosca.capabilities.Endpoint
+Figure 2: the mongodb node now has a capability `mongo_db`
 
-* In the editor, users can specifiy values for the endpoint capability (e.g., `port`, `protocol`).
-* The default attribute: `ip_address` (not shown in the Figure) is the IP address of the hosted compute node. The
-orchestrator will set the `ip_address` in the endpoint capability automatically. A SOURCE node can get the `ip_address`
-to setup a connection (more details in step 3).
+Notice:
+* The `tosca.capabilities.Endpoint.Database` is a TOSCA normative type with some default properties and attributes. By 
+deriving from this type, the capability `mongo_db` also has these properties as in Figure 2.
+* In the editor, users can manually specifiy values for the `mongo_db` capability. For example. users may set the `port`
+to 27017.
+* The `tosca.capabilities.Endpoint` also has a default attribute `ip_address` (not shown in the Figure). The
+orchestrator will automatically set the IP address of the hosted compute node to this attribute. As a result, a SOURCE
+node can get the `ip_address` from the endpoint capability to setup a connection (more details in step 3).
 
 #### Step 2. Define a requirement in the SOURCE node (nodecellar)
 
@@ -47,14 +53,15 @@ node_types:
     ...
     requirements:
       - mongo_db:
-          # nodecellar requires a TARGET node to have a capability Endpoint.Database
+          # nodecellar requires a TARGET node that has a capability from type Endpoint.Database
           capability: tosca.capabilities.Endpoint.Database
           relationship: tosca.relationships.ConnectsTo
 ```
 
 #### Step 3. Extend the interfaces of the SOURCE node to setup the connection
 
-When we `create` a nodecellar node, we get the information from the TARGET node to setup the connection in nodecellar:
+In the `interface` of the nodecellar node (e.g., `create` ), we can get the information from the TARGET node to setup
+the connection:
 
 ```yaml
 node_types:
@@ -70,8 +77,8 @@ node_types:
 ```
 
 Notice:
-* We use the keyword `TARGET` to reference to the target node in the relationship (i.e., the mongodb node).
-* The attribute `ip_address` is the default attribute of the endpoint capability `mongo_db` (as we defined in step 1).
+* We use the keyword `TARGET` to reference to the target node in the relationship.
+* The attribute `ip_address` is the default attribute of the endpoint capability `mongo_db`.
 * We use `get_property` to get the properties from the endpoint capability `mongo_db` (e.g., `port`).
 
 #### Advanced options

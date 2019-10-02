@@ -27,19 +27,6 @@ data_types:
 
 node_types:
 
-  org.alien4cloud.nodes.Application.Docker.Apache:
-    derived_from: tosca.nodes.Container.Application.DockerContainer
-    capabilities:
-      http_endpoint:
-        type: org.alien4cloud.capabilities.endpoint.docker.Http
-    interfaces:
-      Standard:
-        create:
-          implementation:
-            file: httpd:latest
-            repository: docker
-            type: tosca.artifacts.Deployment.Image.Container.Docker
-
   org.alien4cloud.nodes.Application.Docker.Nodecellar:
     derived_from: tosca.nodes.Container.Application.DockerContainer
     properties:
