@@ -12,3 +12,10 @@ Tutorials on how to use TOSCA
 ## Container
 1. How to define a docker container application?
 2. How to deploy a docker container on Kubernetes?
+
+## Author
+* [Tri Hoang Vo](https://www.linkedin.com/in/tri-hoang-vo-395819aa/ "Tri linkedin")
+
+## Copyright
+* TOSCA Tutorials brought to you by [Open Telekom Cloud](https://open-telekom-cloud.com), T-Systems International GmbH.
+* The examples we used in this tutorial are from [Yorc](https://github.com/ystia/tosca-samples).
