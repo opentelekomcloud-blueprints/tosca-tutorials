@@ -15,7 +15,8 @@ To fully control the lifecycle of a relationship in further details:
 
 #### Step 1: Define a custom relationship
 
-First, define a custom relationship `NodejsConnectToMongo` by extending the `tosca.relationships.ConnectsTo` relationship:
+First, define a custom relationship (e.g., `NodejsConnectToMongo`) by extending the `tosca.relationships.ConnectsTo`
+relationship:
 
 ```yaml
 relationship_types:
