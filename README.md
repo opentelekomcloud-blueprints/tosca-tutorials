@@ -7,7 +7,7 @@ Tutorials on how to use TOSCA
 3. [How to define a `ConnectsTo` relationship between two software components?](tutorials/Basic_Relationship_ConnectsTo.md "Relationship connects to example")
 4. [How to define a custom capability?](tutorials/Basic_Custom_Capability.md "Custom capability")
 5. [How to manage the lifecycle of a relationship?](tutorials/Basic_Custom_Relationship.md "Custom relationship connects to example")
-6. [How to deploy a file or a folder (i.e., an `artifact`) to a target compute node?](tutorials/Basic_Artifact.md "Artifact")
+6. [How to deploy a file or a folder (i.e., a `File` artifact) to a target compute node?](tutorials/Basic_Artifact.md "Artifact")
 
 ## Container
 1. How to define a docker container application?

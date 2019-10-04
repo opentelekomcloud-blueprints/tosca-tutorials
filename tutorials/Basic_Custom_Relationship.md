@@ -69,5 +69,5 @@ definition).
 
 #### Where to go from here?
 
-* See [full example](../examples/nodecellar/nodecellar-type.yml "Custom relationship example")
+* See [full example](../examples/nodecellar/types.yml "Custom relationship example")
 * Next: [How to deploy a file or a folder (i.e., an `artifact`) to a target compute node?](Basic_Artifact.md "Artifact")

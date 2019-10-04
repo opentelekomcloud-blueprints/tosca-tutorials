@@ -9,7 +9,7 @@ description: Nodecellar application
 
 imports:
   - tosca-normative-types:1.0.0-ALIEN20
-  - nodejs-type:2.2.0
+  - nodejs-type:2.2.0-1
 
 node_types:
   org.alien4cloud.nodes.Nodecellar:
@@ -25,9 +25,9 @@ node_types:
       nodecellar_url: { concat: ["http://", get_attribute: [HOST, public_ip_address], ":", get_property: [SELF, port] ] }
     requirements:
       - host:
-          capability: org.alien4cloud.capabilities.NodeJSAppContainer
+          capability: otc.capabilities.NodeJSAppContainer
           relationship: org.alien4cloud.relationships.NodecellarHostedOnNodejs
-      - database:
+      - mongo_db:
           capability: tosca.capabilities.Endpoint.Database
           relationship: org.alien4cloud.relationships.NodejsConnectToMongo
           occurrences: [1, 1]
@@ -51,7 +51,7 @@ relationship_types:
       Configure:
           pre_configure_source:
             inputs:
-              DB_IP: { get_attribute: [TARGET, ip_address] }
+              DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
               DB_PORT: { get_property: [TARGET, port] }
               NODECELLAR_PORT: {get_property: [SOURCE, port]}
             implementation: scripts/set-mongo-url.sh
