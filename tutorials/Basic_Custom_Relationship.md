@@ -11,10 +11,11 @@ In the previous example, we used the default relationship `tosca.relationships.C
           relationship: tosca.relationships.ConnectsTo
 ```
 
-#### Step 1: Define custom relationship
+To fully control the lifecycle of a relationship in further details:
 
-To fully control the lifecycle of a relationship in further details, we define a new one by extending 
-`tosca.relationships.ConnectsTo`:
+#### Step 1: Define a custom relationship
+
+First, define a custom relationship `NodejsConnectToMongo` by extending the `tosca.relationships.ConnectsTo` relationship:
 
 ```yaml
 relationship_types:
@@ -29,7 +30,9 @@ relationship_types:
             implementation: scripts/set-mongo-url.sh
 ```
 
-#### Step 2: Update the node requirements with custom relationship
+#### Step 2: Update the node requirements
+
+Second, update the node `requirements` with the new relationship type `NodejsConnectToMongo`:
 
 ```yaml
     ...
@@ -42,11 +45,12 @@ relationship_types:
 
 Notice:
 * The interface `pre_configure_source` is executed after the `SOURCE` node is created (See Figure 1).
-* We use `SOURCE` and `TARGET` to reference to the source node (nodecellar) and target node (mongodb) in a relationship.
+* We use `SOURCE` and `TARGET` to reference to the source node (e.g., nodecellar) and target node (e.g., mongodb) in a
+relationship.
 
 ![](../images/relationship_lifecycle.png "Relationship lifecycle")
 
-Figure 1: Lifecycle of a relationship
+Figure 1: Interfaces to control the lifecycle of a relationship
 
 #### Relationship interfaces:
 
