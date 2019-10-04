@@ -15,6 +15,7 @@ description: MongoBD Component
 
 imports:
   - tosca-normative-types:1.0.0-ALIEN20
+  - yorc-types:1.1.0
 
 node_types:
   otc.nodes.SoftwareComponent.MongoDB:

@@ -1,7 +1,19 @@
 # 2. Create a software component using ansible playbook
 
 In the previous example, we used a python script to implement a software component. In this example, we use an ansible 
-playbook to create a mongodb. In the `create` interface, we use an ansible script as follows:
+playbook to create a mongodb.
+
+#### Step 1. Import yorc-types
+
+```yaml
+imports:
+  - tosca-normative-types:1.0.0-ALIEN20
+  - yorc-types:1.1.0
+```
+
+#### Step2. Use an ansible script
+
+In the `interfaces`, we can use an ansible script as follows:
 
 ```yaml
 node_types:
@@ -50,7 +62,36 @@ install a mongodb as follows:
 
 Here, the environment variables `IP_ADDRESS` and `MONGODB_PORT` are the `inputs` parameters of the `create` interface.
 
+#### Step 2. (alternative) Use a playbook as a zip file
+
+2.1. We have a `playbook` folder contaning all entry scripts (e.g., `create.yml`, `start.yml`, etc.) and a `roles`
+folder:
+
+![](../images/zip_playbook.png "Playbook")
+
+Figure 2: A playbook folder
+
+2.2. Zip the `playbook` folder into `playbook/playbook.ansible`
+
+```shell script
+cd playbook && rm -f playbook.ansible && zip -r playbook.ansible *
+```
+
+2.3. Use the zip file in the `interfaces` and specify the `PLAYBOOK_ENTRY`:
+
+```yaml
+    interfaces:
+      Standard:
+        create:
+          inputs:
+            # the entry script in the playbook folder
+            PLAYBOOK_ENTRY: create.yml
+          # the zip file of the playbook folder
+          implementation: playbook/playbook.ansible
+```
+
 #### Where to go from here?
 
-* See [full example](../examples/mongodb/types.yaml "Ansible example")
+* See [full example how to use ansible script](../examples/mongodb/types.yaml "Ansible example")
+* See [full example how to use playbook as a zip file](../examples/apache/types.yml "Playbook example")
 * Next: [How to define a `ConnectsTo` relationship between two software components?](Basic_Relationship_ConnectsTo.md "Relationship depands on example")

@@ -73,7 +73,6 @@ node_types:
           inputs:
             ENV_MONGO_HOST: { get_attribute: [TARGET, mongo_db, ip_address] }
             ENV_MONGO_PORT: { get_property: [TARGET, mongo_db, port] }
-            ENV_NODECELLAR_PORT: { get_property: [SELF, nodecellar_app, port] }
 ```
 
 Notice:
@@ -81,7 +80,7 @@ Notice:
 * The attribute `ip_address` is the default attribute of the endpoint capability `mongo_db`.
 * We use `get_property` to get the properties from the endpoint capability `mongo_db` (e.g., `port`).
 
-#### Advanced options
+#### Optional requirements
 
 When we define the requirements:
 * We can use `node` to match a target node type explicitly.
@@ -101,3 +100,8 @@ node_types:
           # (Optional) we specifiy relationship one-to-one
           occurrences: [1, 1]
 ```
+
+#### Where to go from here?
+
+* See [full example](../examples/nodecellar-docker/nodecellar-sample-types.yml "Nodecellar example")
+* Next: [How to define a custom capability?](Basic_Custom_Capability.md "Custom capability")
