@@ -7,7 +7,7 @@ you can define an `artifacts` in the node definition as below:
 
 ```yaml
 node_types:
-  otc.nodes.SoftwareComponent.Python:
+  otc.nodes.SoftwareComponent.ComponentA:
     derived_from: tosca.nodes.SoftwareComponent
     interfaces:
       Standard:
