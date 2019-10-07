@@ -77,7 +77,7 @@ etc.) for each role.
 
 Figure 2: The entry script `create.yml` for role `create`
 
-2.2. Zip the `playbook` folder into the file `playbook/playbook.ansible`
+2.2. Zip the content of the `playbook` folder into the file `playbook/playbook.ansible`
 
 ```shell script
 cd playbook && rm -f playbook.ansible && zip -r playbook.ansible *
@@ -92,7 +92,7 @@ cd playbook && rm -f playbook.ansible && zip -r playbook.ansible *
           inputs:
             # the entry script in the playbook folder
             PLAYBOOK_ENTRY: create.yml
-          # the zip file of the playbook folder
+          # the zip file of the playbook folder content
           implementation: playbook/playbook.ansible
 ```
 
