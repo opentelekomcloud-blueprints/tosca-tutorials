@@ -58,3 +58,5 @@ In this example, the artifact name (e.g., `scripts`) is the path to the folder o
 # scripts/create.sh
 ls $scripts
 ```
+
+* See [full example](../examples/artifact/types.yml "Artifact example")

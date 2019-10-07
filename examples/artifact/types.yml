@@ -1,0 +1,19 @@
+tosca_definitions_version: alien_dsl_2_0_0
+
+metadata:
+  template_name: artifacts-example
+  template_version: 1.0.0
+  template_author: Tri
+
+imports:
+  - tosca-normative-types:1.0.0-ALIEN20
+
+node_types:
+  otc.nodes.SoftwareComponent.ComponentWithArifact:
+    derived_from: tosca.nodes.SoftwareComponent
+    interfaces:
+      Standard:
+        create: scripts/create.sh
+    artifacts:
+      - hello_script:
+          type: tosca.artifacts.File
