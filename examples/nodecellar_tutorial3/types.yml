@@ -12,7 +12,7 @@ imports:
   - nodejs-type:2.2.0-1
 
 node_types:
-  org.alien4cloud.nodes.Nodecellar:
+  otc.nodes.WebApplication.Nodecellar:
     derived_from: tosca.nodes.WebApplication
     description: The TOSCA Nodecellar Node Type represents a Nodecellar Application.
     metadata:
@@ -26,32 +26,25 @@ node_types:
     requirements:
       - host:
           capability: otc.capabilities.NodeJSAppContainer
-          relationship: org.alien4cloud.relationships.NodecellarHostedOnNodejs
+          relationship: otc.relationships.NodecellarHostedOnNodejs
       - mongo_db:
           capability: tosca.capabilities.Endpoint.Database
-          relationship: org.alien4cloud.relationships.NodejsConnectToMongo
+          relationship: tosca.relationships.ConnectsTo
           occurrences: [1, 1]
     interfaces:
       Standard:
-        create: scripts/install-nodecellar-app.sh
+        create:
+          implementation: scripts/install-nodecellar-app.sh
+          inputs:
+            DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
+            DB_PORT: { get_property: [TARGET, port] }
+            NODECELLAR_PORT: {get_property: [SOURCE, port]}        
         start: scripts/start-nodecellar-app.sh
         stop: scripts/stop-nodecellar-app.sh
 
 relationship_types:
-  org.alien4cloud.relationships.NodecellarHostedOnNodejs:
+  otc.relationships.NodecellarHostedOnNodejs:
     derived_from: tosca.relationships.HostedOn
     description: Relationship use to describe that the website is deployed on the target nodejs server.
     valid_target_types: [ tosca.capabilities.Container ]
 
-  org.alien4cloud.relationships.NodejsConnectToMongo:
-    derived_from: tosca.relationships.ConnectsTo
-    description: Relationship use to connect nodejs with a mongodb databse
-    valid_target_types: [ tosca.capabilities.Endpoint.Database ]
-    interfaces:
-      Configure:
-          pre_configure_source:
-            inputs:
-              DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
-              DB_PORT: { get_property: [TARGET, port] }
-              NODECELLAR_PORT: {get_property: [SOURCE, port]}
-            implementation: scripts/set-mongo-url.sh

@@ -4,18 +4,19 @@ The following example shows how to create a software component (e.g., a python s
 
 #### Step 1. Import TOSCA types
 
-This example extends the TOSCA type `tosca.nodes.SoftwareComponent`, so we need to import the TOSCA type definition as 
-follows:
+Import the TOSCA type definition:
 
 ```yaml
 imports:
   - tosca-normative-types:1.0.0-ALIEN20
 ```
 
+The imported definition contains some default TOSCA types to use (e.g., `tosca.nodes.SoftwareComponent`).
+
 #### Step 2. Define a new node type
 
-Now we define a new node type (e.g., `otc.nodes.SoftwareComponent.Python`) for our python script by deriving it from an 
-existing node type `tosca.nodes.SoftwareComponent`:
+To define a new node type (e.g., `otc.nodes.SoftwareComponent.Python`) for our python script, we derive from an existing
+node type `tosca.nodes.SoftwareComponent`:
 
 ```yaml
 node_types:
@@ -24,15 +25,14 @@ node_types:
     derived_from: tosca.nodes.SoftwareComponent
 ```
 
-By deriving from the `SoftwareComponent`, the python component can be hosted on a compute node by default 
-as in Figure 1.
+By deriving from the `tosca.nodes.SoftwareComponent`, the python component can be hosted on a compute node as in Figure 1.
 
 ![](../images/1_python.png "Python")
 
 Figure 1: A Python component
 
-The `SoftwareComponent` also comes up with the default property `component_version`. Therefore, the Python component 
-also inherits this property (see Figure 1). In the editor, users can specify the value for the property.
+The `tosca.nodes.SoftwareComponent` also comes up with the default property `component_version`. Therefore, the Python 
+component also inherits this property (see Figure 1). In the editor, users can specify the value for the property.
 
 #### Step 3. Define a custom node properties
 
@@ -116,10 +116,10 @@ We can define the output result for our python component as follows:
 
 Notice:
 * We use `attributes` to define output result of the python node.
-* We use `get_operation_output` to get output from an interface implementation.
+* We use `get_operation_output` to get output from an interface implementation (e.g., `create`).
 
-In this example, the python node outputs `resolvedOutput1`. Its value is set from the variable `myVar1` of the `create` 
-interface. In particular, `myVar1` is an environment variable set in the python script of the `create` interface as 
+In the above example, the python node outputs `resolvedOutput1`. It is the global variable `myVar1` of the `create`
+interface. In particular, `myVar1` is an environment variable set in the python script of the `create` interface as
 follows:
 
 ```python

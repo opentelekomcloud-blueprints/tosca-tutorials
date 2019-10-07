@@ -1,31 +1,26 @@
 # 3. Define a `ConnectsTo` relationship between two software components
 
-This example shows how to define a nodecellar connects to a mongodb as in Figure 1.
+This example shows how to define a `ConnectsTo` relationship from nodecellar (a `SOURCE` node) to mongodb (a `TARGET`
+node)as in Figure 1.
 
 ![](../images/nodecella_mongodb.png "Python")
 
 Figure 1: A topology with nodecellar connects to mongodb on a compute node.
 
-We have 3 steps to define a `ConnectsTo` relationship from nodecellar (a `SOURCE` node) to mongodb (a `TARGET` node) as
-follows:
-
 #### Step 1. Define an endpoint capability in the TARGET node (mongodb)
 
-First, we define a new capability name `mongo_db` from type `tosca.capabilities.Endpoint.Database`:
+In the mongodb node, add the following `capabilities` block:
 
 ```yaml
 node_types:
   otc.nodes.SoftwareComponent.MongoDB:
     ...
     capabilities:
-      # an arbitrary name
       mongo_db:
-        # mongodb offers a capability Endpoint.Database for any SOURCE nodes to connect
         type: tosca.capabilities.Endpoint.Database
 ```
 
-The capability `mongo_db` contains endpoint information for a `SOURCE` node to setup the connection later on (more 
-details in step 3).
+In this example, the new capability `mongo_db` is from type `tosca.capabilities.Endpoint.Database`.
 
 The capability `mongo_db` willl show in the editor as in Figure 2:
 
@@ -36,43 +31,49 @@ Figure 2: the mongodb node now has a capability `mongo_db`
 Notice:
 * The `tosca.capabilities.Endpoint.Database` is a TOSCA normative type with some default properties and attributes. By 
 deriving from this type, the capability `mongo_db` also has these properties as in Figure 2.
-* In the editor, users can manually specifiy values for the `mongo_db` capability. For example. users may set the `port`
-to 27017.
+* The capability `mongo_db` now contains information for a `SOURCE` node to setup the connection in step 3.
+* In the editor, users can specifiy values for the `mongo_db` capability. For example. users may set the `port`to 27017.
 * The `tosca.capabilities.Endpoint` also has a default attribute `ip_address` (not shown in the Figure). The
-orchestrator will automatically set the IP address of the hosted compute node to this attribute. As a result, a SOURCE
-node can get the `ip_address` from the endpoint capability to setup a connection (more details in step 3).
+orchestrator will automatically set the IP address of the hosted compute node to this attribute. A SOURCE node can use
+the `ip_address` to setup a connection in step 3.
 
 #### Step 2. Define a requirement in the SOURCE node (nodecellar)
 
-In this step, we define a new requirement **with the same name** `mongo_db` for nodecellar. We also define a `ConnectsTo`
-relationship in the requirement as follows:
+In the nodecellar node, add the following `requirements` block:
 
 ```yaml
 node_types:
-  org.alien4cloud.nodes.Application.Docker.Nodecellar:
+  otc.nodes.WebApplication.Nodecellar:
+    derived_from: tosca.nodes.WebApplication
     ...
     requirements:
       - mongo_db:
-          # nodecellar requires a TARGET node that has a capability from type Endpoint.Database
+          # nodecellar connects to a TARGET node that has the capability Endpoint.Database
           capability: tosca.capabilities.Endpoint.Database
           relationship: tosca.relationships.ConnectsTo
 ```
 
+Notice:
+* The requirement name of nodecellar node has the same name `mongo_db` as the capability name in the mongodb node.
+* The `tosca.relationships.ConnectsTo` defines the relationship between nodecellar and mongodb.
+
 #### Step 3. Extend the interfaces of the SOURCE node to setup the connection
 
-In the `interface` of the nodecellar node (e.g., `create` ), we can get the information from the TARGET node to setup
-the connection:
+In the `interfaces` of the nodecellar node (e.g., `create` ), we can retrieve the information from the TARGET node to
+and use it as an `inputs` to setup the connection:
 
 ```yaml
 node_types:
-  org.alien4cloud.nodes.Application.Docker.Nodecellar:
+  otc.nodes.WebApplication.Nodecellar:
     ...
     interfaces:
       Standard:
         create:
+          implementation: scripts/install-nodecellar-app.sh
           inputs:
-            ENV_MONGO_HOST: { get_attribute: [TARGET, mongo_db, ip_address] }
-            ENV_MONGO_PORT: { get_property: [TARGET, mongo_db, port] }
+            DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
+            DB_PORT: { get_property: [TARGET, port] }
+            NODECELLAR_PORT: {get_property: [SOURCE, port]}      
 ```
 
 Notice:
@@ -89,7 +90,7 @@ if not specified.
 
 ```yaml
 node_types:
-  org.alien4cloud.nodes.Application.Docker.Nodecellar:
+  otc.nodes.WebApplication.Nodecellar:
     ...
     requirements:
       - mongo_db:
@@ -103,5 +104,5 @@ node_types:
 
 #### Where to go from here?
 
-* See [full example](../examples/nodecellar-docker/nodecellar-sample-types.yml "Nodecellar example")
+* See [full example](../examples/nodecellar_tutorial3/types.yml "Nodecellar example")
 * Next: [How to define a custom capability?](Basic_Custom_Capability.md "Custom capability")

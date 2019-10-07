@@ -11,9 +11,9 @@ imports:
   - yorc-types:1.1.0
 ```
 
-#### Step2. Use an ansible script
+#### Step2. Implement the interfaces
 
-In the `interfaces`, we can use an ansible script as follows:
+In the `interfaces`, we can use an ansible script `mongodb_install.yaml` as follows:
 
 ```yaml
 node_types:
@@ -40,7 +40,13 @@ Notice:
 
 Figure 1: Attributes of a compute node.
 
-The ansible script `mongodb_install.yaml` imports an ansible role `undergreen.ansible-role-mongodb` and uses it to
+In the same folder of the node definition, we have an ansible role available at `playbooks/roles/undergreen.ansible-role-mongodb`
+
+![](../images/mongodb_ansible_directory.png "Compute attributes")
+
+Figure 2: Ansible role
+
+The ansible script `mongodb_install.yaml` imports the ansible role `undergreen.ansible-role-mongodb` and uses it to
 install a mongodb as follows:
 
 ```yaml
@@ -62,22 +68,22 @@ install a mongodb as follows:
 
 Here, the environment variables `IP_ADDRESS` and `MONGODB_PORT` are the `inputs` parameters of the `create` interface.
 
-#### Step 2. (alternative) Use a playbook as a zip file
+#### Step 2. (alternative) Zip the whole playbook folder
 
-2.1. We have a `playbook` folder contaning all entry scripts (e.g., `create.yml`, `start.yml`, etc.) and a `roles`
-folder:
+2.1. We have a `playbook` folder contaning the `roles` folder and several entry scripts (e.g., `create.yml`, `start.yml`,
+etc.) for each role.
 
 ![](../images/zip_playbook.png "Playbook")
 
-Figure 2: A playbook folder
+Figure 2: The entry script `create.yml` for role `create`
 
-2.2. Zip the `playbook` folder into `playbook/playbook.ansible`
+2.2. Zip the `playbook` folder into the file `playbook/playbook.ansible`
 
 ```shell script
 cd playbook && rm -f playbook.ansible && zip -r playbook.ansible *
 ```
 
-2.3. Use the zip file in the `interfaces` and specify the `PLAYBOOK_ENTRY`:
+2.3. Use the zip file in the `interfaces` and specify the `PLAYBOOK_ENTRY` set to the entry script `create.yml`:
 
 ```yaml
     interfaces:
@@ -89,6 +95,8 @@ cd playbook && rm -f playbook.ansible && zip -r playbook.ansible *
           # the zip file of the playbook folder
           implementation: playbook/playbook.ansible
 ```
+
+Then the role `create` in the zip file will be used to create our node.
 
 #### Where to go from here?
 
