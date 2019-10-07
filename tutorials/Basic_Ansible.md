@@ -42,7 +42,7 @@ Figure 1: Attributes of a compute node.
 
 In the same folder of the node definition, we have an ansible role available at `playbooks/roles/undergreen.ansible-role-mongodb`
 
-![](../images/mongodb_ansible_directory.png "Compute attributes")
+![](../images/mongodb_ansible_directory.png "Ansible directory")
 
 Figure 2: Ansible role
 

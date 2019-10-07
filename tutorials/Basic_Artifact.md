@@ -20,7 +20,9 @@ node_types:
 ```
 
 The orchestrator will send the `file` (available at the path `scripts/helloworld.js`) to the compute node, on which the
-software component is deployed. The `interfaces` of the software component (e.g., `create`) can call the file as follows:
+software component is deployed.
+
+To use `file` artifacts in an implementation of the `interfaces` (e.g., `create.sh`):
 
 ```shell script
 # scripts/create.sh
@@ -29,6 +31,12 @@ cat $hello_script
 
 The artifact name (e.g., `hello_script`) will be available as an environment variable in the implementation script,
 which value is the path to the `file` deployed on the target compute node.
+
+In the editor, you can also upload and replace the artifact `hello_script` for a given topology:
+
+![](../images/artifacts.png "Artifact")
+
+Figure 1: Click "Select Artifact" to replace an artifact
 
 #### 6.2. How to deploy a folder?
 
@@ -40,11 +48,11 @@ node_types:
     artifacts:
       - scripts:
           type: tosca.artifacts.File
-          # path to an existing folder in the same path of types.yaml
-          file: scripts
+          # path to an existing folder "myscripts" in the same path of types.yaml
+          file: myscripts
 ```
 
-In this case, the artifact name (e.g., `scripts`) is the path to the folder on the target compute node:
+In this example, the artifact name (e.g., `scripts`) is the path to the folder on the target compute node.
 
 ```shell script
 # scripts/create.sh
