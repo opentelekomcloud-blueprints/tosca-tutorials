@@ -83,7 +83,7 @@ Figure 2: The entry script `create.yml` for role `create`
 cd playbook && rm -f playbook.ansible && zip -r playbook.ansible *
 ```
 
-2.3. Use the zip file in the `interfaces` and specify the `PLAYBOOK_ENTRY` set to the entry script `create.yml`:
+2.3. Use the zip file in the `interfaces` and set the `PLAYBOOK_ENTRY` to the entry script `create.yml`:
 
 ```yaml
     interfaces:
