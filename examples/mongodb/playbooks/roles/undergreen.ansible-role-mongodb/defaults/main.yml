@@ -1,17 +1,21 @@
 ---
 
 mongodb_package: mongodb-org
-mongodb_version: "3.6"
+mongodb_package_state: present
+mongodb_version: "4.0"
 mongodb_apt_keyserver: keyserver.ubuntu.com
 mongodb_apt_key_id:
-  "3.2": "EA312927"
   "3.4": "0C49F3730359A14518585931BC711F9BA15703C6"
   "3.6": "2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5"
+  "4.0": "9DA31620334BD75D9DCB49F368818C72E52529D4"
 
 mongodb_pymongo_from_pip: true                   # Install latest PyMongo via PIP or package manager
+mongodb_pymongo_pip_version: 3.7.1
 
 mongodb_user_update_password: "on_create"        # MongoDB user password update default policy
 mongodb_manage_service: true
+
+mongodb_disable_transparent_hugepages: false
 
 mongodb_user: "{{ 'mongod' if ('RedHat' == ansible_os_family) else 'mongodb' }}"
 mongodb_uid:
@@ -24,6 +28,9 @@ mongodb_net_http_enabled: false                  # Enable http interface
 mongodb_net_ipv6: false                          # Enable IPv6 support (disabled by default)
 mongodb_net_maxconns: 65536                      # Max number of simultaneous connections
 mongodb_net_port: 27017                          # Specify port number
+mongodb_net_ssl: disabled                        # Enable or disable ssl connections
+mongodb_net_ssl_mode: ""                         # Set the ssl mode (RequireSSL / preferSSL / AllowSSL / disabled)
+mongodb_net_ssl_pemfile: ""                      # Location of the pemfile to use for ssl
 
 ## processManagement Options
 # Fork server process
@@ -34,11 +41,13 @@ mongodb_processmanagement_fork: "{{ 'RedHat' == ansible_os_family }}"
 # Disable or enable security. Possible values: 'disabled', 'enabled'
 mongodb_security_authorization: "disabled"
 mongodb_security_keyfile: /etc/mongodb-keyfile   # Specify path to keyfile with password for inter-process authentication
+mongodb_security_javascript_enabled: false
 
 ## storage Options
 mongodb_storage_dbpath: /data/db                 # Directory for datafiles
-# The storage engine for the mongod database. Available values:
-# 'mmapv1', 'wiredTiger'
+mongodb_storage_dirperdb: false                  # Use one directory per DB
+
+# The storage engine for the mongod database
 mongodb_storage_engine: "wiredTiger"
 # mmapv1 specific options
 mongodb_storage_quota_enforced: false            # Limits each database to a certain number of files
@@ -48,20 +57,27 @@ mongodb_storage_smallfiles: false                # Very useful for non-data node
 mongodb_storage_journal_enabled: true            # Enable journaling
 mongodb_storage_prealloc: true                   # Enable data file preallocation
 
+mongodb_wiredtiger_directory_for_indexes: false
+
 ## systemLog Options
 ## The destination to which MongoDB sends all log output. Specify either 'file' or 'syslog'.
 ## If you specify 'file', you must also specify mongodb_systemlog_path.
 mongodb_systemlog_destination: "file"
 mongodb_systemlog_logappend: true                                        # Append to logpath instead of over-writing
+mongodb_systemlog_logrotate: "rename"                                    # Logrotation behavior
 mongodb_systemlog_path: /var/log/mongodb/{{ mongodb_daemon_name }}.log   # Log file to send write to instead of stdout
 
+## operationProfiling Options
+mongodb_operation_profiling_slow_op_threshold_ms: 100
+mongodb_operation_profiling_mode: "off"
+
 ## replication Options
-mongodb_replication_replset:                      # Enable replication <setname>[/<optionalseedhostlist>]
+mongodb_replication_replset: ""                   # Enable replication
 mongodb_replication_replindexprefetch: "all"      # specify index prefetching behavior (if secondary) [none|_id_only|all]
 mongodb_replication_oplogsize: 1024               # specifies a maximum size in megabytes for the replication operation log
 
 # MMS Agent
-mongodb_mms_agent_pkg: https://mms.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager_1.4.2.783-1_amd64.deb
+mongodb_mms_agent_pkg: https://cloud.mongodb.com/download/agent/monitoring/mongodb-mms-monitoring-agent_7.2.0.488-1_amd64.ubuntu1604.deb
 mongodb_mms_group_id: ""
 mongodb_mms_api_key: ""
 mongodb_mms_base_url: https://mms.mongodb.com

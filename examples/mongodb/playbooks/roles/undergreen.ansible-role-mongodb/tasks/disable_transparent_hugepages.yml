@@ -1,0 +1,15 @@
+---
+- name: Create disable transparent hugepages systemd service file
+  copy:
+    src: disable-transparent-hugepages.service
+    dest: /etc/systemd/system/disable-transparent-hugepages.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable disable-transparent-hugepages.service
+  systemd:
+    name: disable-transparent-hugepages
+    daemon-reload: true
+    enabled: true
+    state: started

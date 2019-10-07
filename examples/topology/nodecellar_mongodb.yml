@@ -1,0 +1,128 @@
+tosca_definitions_version: alien_dsl_2_0_0
+
+metadata:
+  template_name: nodecellar_mongodb
+  template_version: 0.1.0-SNAPSHOT
+  template_author: Tri
+
+description: "A nodecellar connects to mongodb"
+
+imports:
+  - yorc-types:1.1.0
+  - tosca-normative-types:1.0.0-ALIEN20
+  - nodecellar-type:1.0.0
+  - org.ystia.mongodb.linux.ansible:1.0.0
+  - nodejs-type:2.2.0-1
+
+topology_template:
+  node_templates:
+    Network:
+      type: tosca.nodes.Network
+      properties:
+        ip_version: 4
+    Compute:
+      type: tosca.nodes.Compute
+      requirements:
+        - networkNetworkConnection:
+            type_requirement: network
+            node: Network
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+      capabilities:
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 1
+            default_instances: 1
+        endpoint:
+          properties:
+            secure: true
+            protocol: tcp
+            network_name: PRIVATE
+            initiator: source
+    Compute_2:
+      metadata:
+        a4c_edit_x: "-51"
+        a4c_edit_y: 42
+      type: tosca.nodes.Compute
+      capabilities:
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 1
+            default_instances: 1
+        endpoint:
+          properties:
+            secure: true
+            protocol: tcp
+            network_name: PRIVATE
+            initiator: source
+    Nodejs:
+      type: tosca.nodes.WebServer.Nodejs
+      properties:
+        component_version: "10.x"
+      requirements:
+        - hostedOnComputeHost:
+            type_requirement: host
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+      capabilities:
+        data_endpoint:
+          properties:
+            protocol: tcp
+            secure: false
+            network_name: PRIVATE
+            initiator: source
+        admin_endpoint:
+          properties:
+            secure: true
+            protocol: tcp
+            network_name: PRIVATE
+            initiator: source
+    Nodecellar:
+      type: org.alien4cloud.nodes.Nodecellar
+      properties:
+        port: 8088
+      requirements:
+        - nodecellarHostedOnNodejsNodejsHost:
+            type_requirement: host
+            node: Nodejs
+            capability: otc.capabilities.NodeJSAppContainer
+            relationship: org.alien4cloud.relationships.NodecellarHostedOnNodejs
+        - nodejsConnectToMongoMongoDbMongo_db:
+            type_requirement: mongo_db
+            node: MongoDB
+            capability: tosca.capabilities.Endpoint.Database
+            relationship: org.alien4cloud.relationships.NodejsConnectToMongo
+      capabilities:
+        app_endpoint:
+          properties:
+            protocol: tcp
+            secure: false
+            network_name: PRIVATE
+            initiator: source
+    MongoDB:
+      type: otc.nodes.SoftwareComponent.MongoDB
+      properties:
+        component_version: 3.6
+        port: 27017
+        db_path: "/var/lib/mongo"
+        quota_enforced: false
+        quota_maxfiles: 8
+      requirements:
+        - hostedOnCompute2Host:
+            type_requirement: host
+            node: Compute_2
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+      capabilities:
+        mongo_db:
+          properties:
+            protocol: tcp
+            secure: false
+            network_name: PRIVATE
+            initiator: source
+  outputs:
+    Nodecellar_nodecellar_url:
+      value: { get_attribute: [ Nodecellar, nodecellar_url ] }

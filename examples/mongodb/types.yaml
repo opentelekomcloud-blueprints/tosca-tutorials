@@ -8,7 +8,7 @@ tosca_definitions_version: alien_dsl_2_0_0
 
 metadata:
   template_name: org.ystia.mongodb.linux.ansible
-  template_version: 2.2.0-SNAPSHOT
+  template_version: 1.0.0
   template_author: Ystia
 
 description: MongoBD Component
@@ -24,7 +24,7 @@ node_types:
     tags:
       icon: /images/mongodb.jpg
     attributes:
-      url: { concat: ["http://", get_attribute: [HOST, public_ip_address], ":28017" ] }
+      url: { concat: ["http://", get_attribute: [HOST, public_ip_address], ":", get_property: [SELF, port] ] }
     properties:
       component_version:
         type: version
