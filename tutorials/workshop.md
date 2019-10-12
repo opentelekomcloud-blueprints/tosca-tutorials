@@ -167,7 +167,7 @@ Notice:
 * `get_property` get the `port` property of the `TARGET` node.
 * Here the `TARGET` node in the relationship is the mongodb node.
 
-#### Step 10. Zip the content inside the folder nodecellar_tutorial3
+#### Step 10. Zip the content inside the folder nodecellar_tutorial4
 
 ```shell script
 cd examples/nodecellar_tutorial4 && zip -r nodecellar.zip *
