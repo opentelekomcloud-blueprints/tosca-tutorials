@@ -127,16 +127,16 @@ Add
 ```yaml
       - mongo_db:
           capability: tosca.capabilities.Endpoint.Database
-          relationship: otc.relationships.NodejsConnectToMongo
+          relationship: otc.relationships.NodecellarConnectToMongo
           occurrences: [1, 1]
 ```
 
 Notice:
 * Here the nodecellar node requires a node with the `mongo_db` capability. Recall that we have already defined the
 `mongo_db` capability for the mongodb node (in step 3).
-* The requirement has a `NodejsConnectToMongo` relationship (i.e., nodecellar `ConnectsTo` mongodb).
+* The requirement has a `NodecellarConnectToMongo` relationship (i.e., nodecellar `ConnectsTo` mongodb).
 
-#### Step 9. Define the relationship `NodejsConnectToMongo`
+#### Step 9. Define the relationship `NodecellarConnectToMongo`
 
 Under
 
@@ -147,7 +147,7 @@ relationship_types:
 Add
 
 ```yaml
-  otc.relationships.NodejsConnectToMongo:
+  otc.relationships.NodecellarConnectToMongo:
     derived_from: tosca.relationships.ConnectsTo
     description: Relationship use to connect nodejs with a mongodb databse
     valid_target_types: [ tosca.capabilities.Endpoint.Database ]
@@ -194,6 +194,7 @@ steps:
 5. Drag the `Nodecellar` node on `nodejs` node.
 6. Drag the `MongoDB` node on the compute mongodb.
 7. Connects `Nodecellar` to the endpoint `mongo_db` of `MongoDB` node.
+8. Click on `Nodecellar` node, chose `nodecellar_url` as the output of the deployment.
 
 SAVE
 
