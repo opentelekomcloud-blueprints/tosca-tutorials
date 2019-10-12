@@ -106,7 +106,7 @@ CONGRATULATION! You have completed the mongodb node. Now continue with the nodec
 
 #### Step 7. Edit templete version of nodecellar
 
-Open [examples/nodecellar_tutorial3/types.yml](../examples/nodecellar_tutorial3/types.yml "Nodecellar example")
+Open [examples/nodecellar_tutorial4/types.yml](../examples/nodecellar_tutorial4/types.yml "Nodecellar example")
 
 Replace `ỲOURNAME` with your name (line 5).
 
@@ -127,35 +127,42 @@ Add
 ```yaml
       - mongo_db:
           capability: tosca.capabilities.Endpoint.Database
-          relationship: tosca.relationships.ConnectsTo
+          relationship: otc.relationships.NodejsConnectToMongo
           occurrences: [1, 1]
 ```
 
 Notice:
 * Here the nodecellar node requires a node with the `mongo_db` capability. Recall that we have already defined the
 `mongo_db` capability for the mongodb node (in step 3).
-* The requirement has a `ConnectsTo` relationship (i.e., nodecellar `ConnectsTo` mongodb).
+* The requirement has a `NodejsConnectToMongo` relationship (i.e., nodecellar `ConnectsTo` mongodb).
 
-#### Step 9. Add `inputs` for nodecellar
+#### Step 9. Define the relationship `NodejsConnectToMongo`
 
-Under the `inputs` of the `cretae` interface:
+Under
 
 ```yaml
-    interfaces:
-      Standard:
-        create:
-          implementation: scripts/install-nodecellar-app.sh
-          inputs:
+relationship_types:
 ```
 
 Add
 
 ```yaml
+  otc.relationships.NodejsConnectToMongo:
+    derived_from: tosca.relationships.ConnectsTo
+    description: Relationship use to connect nodejs with a mongodb databse
+    valid_target_types: [ tosca.capabilities.Endpoint.Database ]
+    interfaces:
+      Configure:
+        pre_configure_source:
+          inputs:
             DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
             DB_PORT: { get_property: [TARGET, port] }
+            NODECELLAR_PORT: {get_property: [SOURCE, port]}
+          implementation: scripts/set-mongo-url.sh
 ```
 
 Notice:
+* We define a new relationship `NodejsConnectToMongo` from a `tosca.relationships.ConnectsTo`.
 * `get_attribute` get the `ip_address` from the capability `mongo_db` of the `TARGET` node at runtime.
 * `get_property` get the `port` property of the `TARGET` node.
 * Here the `TARGET` node in the relationship is the mongodb node.
