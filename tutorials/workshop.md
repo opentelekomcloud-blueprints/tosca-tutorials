@@ -96,7 +96,7 @@ Add the input `MONGODB_PORT` as an ansible variable as follows (line 14)
         mongodb_net_port: "{{ MONGODB_PORT }}"
 ```
 
-#### Step 6. Zip the content of folder mongodb
+#### Step 6. Zip the content inside the folder mongodb
 
 ```shell script
 cd examples/mongodb && zip -r mongodb.zip *
@@ -156,10 +156,11 @@ Add
 ```
 
 Notice:
-* `get_attribute` get the `ip_address` from the capability `mongo_db` of the TARGET node at runtime.
-* Here the TARGET node in the relationship is the mongodb node.
+* `get_attribute` get the `ip_address` from the capability `mongo_db` of the `TARGET` node at runtime.
+* `get_property` get the `port` property of the `TARGET` node.
+* Here the `TARGET` node in the relationship is the mongodb node.
 
-#### Step 10. Zip the content of the folder nodecellar_tutorial3
+#### Step 10. Zip the content inside the folder nodecellar_tutorial3
 
 ```shell script
 cd examples/nodecellar_tutorial3 && zip -r nodecellar.zip *
@@ -188,3 +189,5 @@ steps:
 7. Connects `Nodecellar` to the endpoint `mongo_db` of `MongoDB` node.
 
 SAVE
+
+The topology is ready to deploy!
