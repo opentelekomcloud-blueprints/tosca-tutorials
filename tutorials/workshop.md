@@ -170,7 +170,7 @@ Notice:
 #### Step 10. Zip the content inside the folder nodecellar_tutorial3
 
 ```shell script
-cd examples/nodecellar_tutorial3 && zip -r nodecellar.zip *
+cd examples/nodecellar_tutorial4 && zip -r nodecellar.zip *
 ```
 
 CONGRATULATION! You have completed the nodecellar node.
