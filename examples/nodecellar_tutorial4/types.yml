@@ -2,7 +2,7 @@ tosca_definitions_version: alien_dsl_1_4_0
 
 metadata:
   template_name: nodecellar-type
-  template_version: 1.0.0
+  template_version: 1.0.0-YOURNAME
   template_author: alien4cloud
 
 description: Nodecellar application
@@ -24,13 +24,10 @@ node_types:
     attributes:
       nodecellar_url: { concat: ["http://", get_attribute: [HOST, public_ip_address], ":", get_property: [SELF, port] ] }
     requirements:
+
       - host:
           capability: otc.capabilities.NodeJSAppContainer
           relationship: otc.relationships.NodecellarHostedOnNodejs
-      - mongo_db:
-          capability: tosca.capabilities.Endpoint.Database
-          relationship: otc.relationships.NodejsConnectToMongo
-          occurrences: [1, 1]
     interfaces:
       Standard:
         create: scripts/install-nodecellar-app.sh
@@ -38,20 +35,8 @@ node_types:
         stop: scripts/stop-nodecellar-app.sh
 
 relationship_types:
+
   otc.relationships.NodecellarHostedOnNodejs:
     derived_from: tosca.relationships.HostedOn
     description: Relationship use to describe that the website is deployed on the target nodejs server.
     valid_target_types: [ tosca.capabilities.Container ]
-
-  otc.relationships.NodejsConnectToMongo:
-    derived_from: tosca.relationships.ConnectsTo
-    description: Relationship use to connect nodejs with a mongodb databse
-    valid_target_types: [ tosca.capabilities.Endpoint.Database ]
-    interfaces:
-      Configure:
-          pre_configure_source:
-            inputs:
-              DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
-              DB_PORT: { get_property: [TARGET, port] }
-              NODECELLAR_PORT: {get_property: [SOURCE, port]}
-            implementation: scripts/set-mongo-url.sh
