@@ -162,7 +162,7 @@ Add
 ```
 
 Notice:
-* We define a new relationship `NodejsConnectToMongo` from a `tosca.relationships.ConnectsTo`.
+* We define a new relationship `NodecellarConnectToMongo` from a `tosca.relationships.ConnectsTo`.
 * `get_attribute` get the `ip_address` from the capability `mongo_db` of the `TARGET` node at runtime.
 * `get_property` get the `port` property of the `TARGET` node.
 * Here the `TARGET` node in the relationship is the mongodb node.
