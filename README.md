@@ -1,6 +1,10 @@
 # tosca-tutorials
 Tutorials on how to use TOSCA
 
+## Workshop
+
+[Nodecellar and mongodb](tutorials/workshop.md "Workshop example")
+
 ## Basic
 1. [How to manage the lifecycle (create, update, delete) of a software component on a compute node?](tutorials/Basic_Lifecycle.md "Python example")
 2. [How to create a software component using an ansible playbook?](tutorials/Basic_Ansible.md "Ansible example")
