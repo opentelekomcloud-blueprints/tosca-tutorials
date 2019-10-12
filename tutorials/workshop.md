@@ -2,8 +2,8 @@
 
 #### Our mission today:
 
-* use an ansible playbook to create a database mongodb.
-* use a shell script to create a nodecellar (a front-end website based on nodejs).
+* create a database mongodb (with ansible).
+* create a nodecellar (a front-end website based on nodejs).
 * connect nodecellar to mongodb as in Figure 1:
 
 ![](../images/nodecella_mongodb.png "workshop")
