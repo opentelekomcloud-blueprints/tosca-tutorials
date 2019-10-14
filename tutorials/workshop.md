@@ -58,7 +58,7 @@ Notice:
 
 #### Step 4. Define the create interface for mongodb
 
-Under `inputs` of the `cretae` interface:
+Under `inputs` of the `create` interface:
 
 ```yaml
     interfaces:
@@ -74,7 +74,16 @@ Add
             MONGODB_PORT: { get_property: [SELF, port] }
 ```
 
-Add the ansible playbook `playbooks/mongodb_install.yaml` in the `implementation` of the `create` interface as follows:
+Add the ansible playbook `playbooks/mongodb_install.yaml` in the `implementation` of the `create` interface.
+
+Replace
+
+```yaml
+          implementation:
+```
+
+By:
+
 
 ```yaml
           implementation: playbooks/mongodb_install.yaml
