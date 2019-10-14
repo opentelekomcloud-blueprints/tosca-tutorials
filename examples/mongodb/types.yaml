@@ -55,9 +55,9 @@ node_types:
         create:
           description: MongoDB installation step
           inputs:
+
             IP_ADDRESS: { get_attribute: [HOST, private_address] }
             MONGODB_VERSION: { get_property: [SELF, component_version] }
-
             MONGODB_DB_PATH: { get_property: [SELF, db_path] }
             MONGODB_QUOTA_ENFORCED: { get_property: [SELF, quota_enforced] }
             MONGODB_QUOTA_MAXFILES: { get_property: [SELF, quota_maxfiles] }
