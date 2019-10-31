@@ -105,9 +105,9 @@ Relationship interfaces executed on the `TARGET` node:
 
 #### Optional requirements
 
-When we define the requirements in step 2:
-* We can define an optional requirement `node` to match a node type explicitly.
-* We can specify how many relationship instances (e.g., one to one, one to two, etc.). The default value is one-to-one,
+When we define the requirements in step 2, we can also:
+* Use the keyword `node` to define a matched node type.
+* Define how many relationship instances (e.g., one to one, one to two, etc.). The default value is one-to-one,
 if not specified.
 
 ```yaml
