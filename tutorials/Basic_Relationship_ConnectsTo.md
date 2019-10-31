@@ -34,7 +34,7 @@ deriving from this type, the capability `mongo_db` also has these properties as 
 * The capability `mongo_db` now contains information for a `SOURCE` node to setup the connection in step 3.
 * In the editor, users can specifiy values for the `mongo_db` capability. For example. users may set the `port`to 27017.
 * The `tosca.capabilities.Endpoint` also has a default attribute `ip_address` (not shown in the Figure). The
-orchestrator will automatically set the IP address of the hosted compute node to this attribute. A SOURCE node can use
+orchestrator will automatically set the IP address of the hosted compute node to this attribute. A `SOURCE` node can use
 the `ip_address` to setup a connection in step 3.
 
 #### Step 2. Define a requirement in the SOURCE node (nodecellar)
@@ -56,12 +56,10 @@ node_types:
 
 Notice:
 * The requirement name of nodecellar node has the same name `mongo_db` as the capability name in the mongodb node.
-* The `otc.relationships.NodejsConnectToMongo` defines the relationship which nodecellar uses to setup the connection.
 
 #### Step 3: Define the relationship
 
-This step defines the relationship `otc.relationships.NodejsConnectToMongo` for nodecellar to setup the connection with
-mongodb as follows:
+Define the relationship `otc.relationships.NodejsConnectToMongo` for nodecellar to setup the connection with mongodb:
 
 ```yaml
 relationship_types:
