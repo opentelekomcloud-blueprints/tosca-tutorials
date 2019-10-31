@@ -24,4 +24,4 @@ capability_types:
 Here, the custom capability `tosca.capabilities.Endpoint.Database.Mongo` inherits all properties from the parent 
 type `tosca.capabilities.Endpoint.Database` and set the `port` property to the default value 27017.
 
-* Next: [How to manage the lifecycle of a relationship?](Basic_Custom_Relationship.md "Custom relationship connects to example")
+* Next: [How to deploy a file or a folder (i.e., an `artifact`) to a target compute node?](Basic_Artifact.md "Artifact")

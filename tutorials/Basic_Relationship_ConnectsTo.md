@@ -48,43 +48,66 @@ node_types:
     ...
     requirements:
       - mongo_db:
-          # nodecellar connects to a TARGET node that has the capability Endpoint.Database
+          # nodecellar connects to a node that has the capability Endpoint.Database
           capability: tosca.capabilities.Endpoint.Database
-          relationship: tosca.relationships.ConnectsTo
+          # nodecellar uses this relationship to setup the connection
+          relationship: otc.relationships.NodejsConnectToMongo
 ```
 
 Notice:
 * The requirement name of nodecellar node has the same name `mongo_db` as the capability name in the mongodb node.
-* The `tosca.relationships.ConnectsTo` defines the relationship between nodecellar and mongodb.
+* The `otc.relationships.NodejsConnectToMongo` defines the relationship which nodecellar uses to setup the connection.
 
-#### Step 3. Extend the interfaces of the SOURCE node to setup the connection
+#### Step 3: Define the relationship
 
-In the `interfaces` of the nodecellar node (e.g., `create` ), we can retrieve the information from the TARGET node to
-and use it as an `inputs` to setup the connection:
+This step defines the relationship `otc.relationships.NodejsConnectToMongo` for nodecellar to setup the connection with
+mongodb as follows:
 
 ```yaml
-node_types:
-  otc.nodes.WebApplication.Nodecellar:
-    ...
+relationship_types:
+  otc.relationships.NodejsConnectToMongo:
+    derived_from: tosca.relationships.ConnectsTo
     interfaces:
-      Standard:
-        create:
-          implementation: scripts/install-nodecellar-app.sh
+      Configure:
+        pre_configure_source:
           inputs:
             DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
             DB_PORT: { get_property: [TARGET, port] }
-            NODECELLAR_PORT: {get_property: [SOURCE, port]}      
+            NODECELLAR_PORT: {get_property: [SOURCE, port]}
+          implementation: scripts/set-mongo-url.sh
 ```
 
 Notice:
-* We use the keyword `TARGET` to reference to the target node in the relationship.
-* The attribute `ip_address` is the default attribute of the endpoint capability `mongo_db`.
+* This relationship extends the default `tosca.relationships.ConnectsTo` relationship.
+* The interface `pre_configure_source` defines how to configure nodecellar to connect to mongodb. This interface is
+executed after the `create` interface (see Figure 3).
+* We use `SOURCE` and `TARGET` to reference to the source node (e.g., nodecellar) and target node (e.g., mongodb) in a
+relationship.
 * We use `get_property` to get the properties from the endpoint capability `mongo_db` (e.g., `port`).
+* The attribute `ip_address` is the default attribute of the endpoint capability `mongo_db`.
+
+![](../images/relationship_lifecycle.png "Relationship lifecycle")
+
+Figure 3: Interfaces to control the lifecycle of a relationship
+
+#### Relationship interfaces:
+
+Relationship interfaces executed on the `SOURCE` node:
+* `pre_configure_source` is executed after the `SOURCE` node is created, and before it is configured.
+* `post_configure_source`: executes after the `SOURCE` node is configured, and before it starts.
+
+* `add_target`: executes after the `TARGET` node is started.
+* `remove_target`: executes after the `TARGET` node is removed.
+* `target_changed`: executes whenever the `TARGET` node changes.
+
+Relationship interfaces executed on the `TARGET` node:
+* `pre_configure_target`: executes after the `TARGET` node is created, and before it is configured.
+* `post_configure_target`: executes after the `TARGET` node is configured, and before it starts.
 
 #### Optional requirements
 
-When we define the requirements:
-* We can use `node` to match a target node type explicitly.
+When we define the requirements in step 2:
+* We can define an optional requirement `node` to match a node type explicitly.
 * We can specify how many relationship instances (e.g., one to one, one to two, etc.). The default value is one-to-one,
 if not specified.
 
@@ -104,5 +127,5 @@ node_types:
 
 #### Where to go from here?
 
-* See [full example](../examples/nodecellar_tutorial3/types.yml "Nodecellar example")
+* See [full example](../examples/nodecellar/types.yml "Relationship example")
 * Next: [How to define a custom capability?](Basic_Custom_Capability.md "Custom capability")
