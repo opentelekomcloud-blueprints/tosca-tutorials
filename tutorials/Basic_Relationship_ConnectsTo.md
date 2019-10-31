@@ -55,7 +55,8 @@ node_types:
 ```
 
 Notice:
-* The requirement name of nodecellar node has the same name `mongo_db` as the capability name in the mongodb node.
+* The requirement name of nodecellar node (i.e., `mongo_db`) and the capability name of the mongodb node (in step 1)
+are the same.
 
 #### Step 3: Define the relationship
 
