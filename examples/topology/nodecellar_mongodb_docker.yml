@@ -1,0 +1,94 @@
+tosca_definitions_version: alien_dsl_2_0_0
+
+metadata:
+  template_name: OTC_EU_DE_00000000001000035467_eu_de_test_Testkube
+  template_version: 0.1.0-SNAPSHOT
+  template_author: OTC-EU-DE-00000000001000035467_trvohoan
+
+description: ""
+
+imports:
+  - nodecellar-sample-types:2.0.0-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN20
+  - docker-types:2.2.0-SNAPSHOT
+
+topology_template:
+  node_templates:
+    ContainerRuntime:
+      metadata:
+        a4c_edit_x: 176
+        a4c_edit_y: "-42"
+      type: org.alien4cloud.extended.container.types.ContainerRuntime
+    ContainerRuntime_2:
+      metadata:
+        a4c_edit_x: 425
+        a4c_edit_y: "-41"
+      type: org.alien4cloud.extended.container.types.ContainerRuntime
+    Mongo:
+      type: org.alien4cloud.nodes.Application.Docker.Mongo
+      properties:
+        cpu_share: 1.0
+        mem_share: "128 MB"
+        docker_bash_cmd: 
+          - "/bin/bash"
+          - "-c"
+      requirements:
+        - hostedOnContainerRuntimeContainerRuntime2Host:
+            type_requirement: host
+            node: ContainerRuntime_2
+            capability: org.alien4cloud.extended.container.capabilities.ApplicationHost
+            relationship: org.alien4cloud.extended.container.relationships.HostedOnContainerRuntime
+      capabilities:
+        mongo_db:
+          properties:
+            docker_bridge_port_mapping: 0
+            port: 27017
+            api_version: v1
+            protocol: tcp
+            secure: false
+            network_name: PRIVATE
+            initiator: source
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 1
+            default_instances: 1
+    Nodecellar:
+      type: org.alien4cloud.nodes.Application.Docker.Nodecellar
+      properties:
+        docker_run_cmd: "/bin/sh"
+        docker_run_args: 
+          - "-c"
+          - "nodejs server.js"
+        docker_env_vars: 
+          LOG_LEVEL: ""
+        cpu_share: 1.0
+        mem_share: "128 MB"
+        docker_bash_cmd: 
+          - "/bin/bash"
+          - "-c"
+      requirements:
+        - connectsToMongoMongo_db:
+            type_requirement: mongo_db
+            node: Mongo
+            capability: org.alien4cloud.capabilities.endpoint.docker.Mongo
+            relationship: tosca.relationships.ConnectsTo
+        - hostedOnContainerRuntimeContainerRuntimeHost:
+            type_requirement: host
+            node: ContainerRuntime
+            capability: org.alien4cloud.extended.container.capabilities.ApplicationHost
+            relationship: org.alien4cloud.extended.container.relationships.HostedOnContainerRuntime
+      capabilities:
+        nodecellar_app:
+          properties:
+            docker_bridge_port_mapping: 0
+            port: 3000
+            protocol: tcp
+            secure: false
+            network_name: PRIVATE
+            initiator: source
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 1
+            default_instances: 1
