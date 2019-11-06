@@ -2,12 +2,12 @@ tosca_definitions_version: alien_dsl_2_0_0
 
 metadata:
   template_name: nodecellar-sample-types
-  template_version: 2.0.0
+  template_version: 2.0.0-SNAPSHOT
   template_author: alien4cloud
 
 imports:
   - tosca-normative-types:1.0.0-ALIEN20
-  - docker-types:2.0.0
+  - docker-types:2.2.0-SNAPSHOT
 
 repositories:
   docker:
@@ -32,7 +32,14 @@ node_types:
     properties:
       docker_run_cmd:
         type: string
-        default: "cd /nodecellar && nodejs server.js"
+        default: "/bin/sh"
+      docker_run_args:
+        type: list
+        entry_schema:
+          type: string
+        default:
+          - "-c"
+          - "nodejs server.js"
       docker_options:
         type: org.alien4cloud.datatypes.docker.cli-args.Nodecellar
         required: false
