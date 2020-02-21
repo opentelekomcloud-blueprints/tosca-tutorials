@@ -17,12 +17,13 @@ node_types:
     description: The TOSCA Nodecellar Node Type represents a Nodecellar Application.
     metadata:
       icon: /images/nodecellar.jpg
-    properties:
-      port:
-        type: integer
-        default: 8088
     attributes:
-      nodecellar_url: { concat: ["http://", get_attribute: [HOST, public_ip_address], ":", get_property: [SELF, port] ] }
+      nodecellar_url: { concat: ["http://", get_attribute: [HOST, public_ip_address], ":", get_property: [SELF, app_endpoint, port] ] }
+    capabilities:
+      app_endpoint:
+        type: tosca.capabilities.Endpoint
+        properties:
+          port: 8080
     requirements:
       - host:
           capability: otc.capabilities.NodeJSAppContainer
@@ -52,6 +53,6 @@ relationship_types:
           pre_configure_source:
             inputs:
               DB_IP: { get_attribute: [TARGET, mongo_db, ip_address] }
-              DB_PORT: { get_property: [TARGET, port] }
-              NODECELLAR_PORT: {get_property: [SOURCE, port]}
+              DB_PORT: { get_property: [TARGET, mongo_db, port] }
+              NODECELLAR_PORT: {get_property: [SOURCE, app_endpoint, port]}
             implementation: scripts/set-mongo-url.sh
