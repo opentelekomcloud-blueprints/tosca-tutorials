@@ -18,7 +18,7 @@ to setup the relationship between them with ansible, python, and shell script.
 
 ![](images/topology_example.png "TOSCA example")
 
-Figure 1: TOSCA example
+###### Figure 1: A topology example, designed by the OTC Topology Designer
 
 The following tutorial shows how users use TOSCA to do so.
 
