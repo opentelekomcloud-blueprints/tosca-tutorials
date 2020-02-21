@@ -1,5 +1,25 @@
 # tosca-tutorials
-Tutorials on how to use TOSCA
+
+## Overview
+
+TOSCA is a YAML file that describes a topology of a cloud application. It means, users can describe how they want to
+deploy their applications in multiple cloud providers. Figure 1 shows an example, whereby users describe three points:
+1. the desired cloud infrastructure (e.g., one public / private `network`, two `compute` nodes, one `block storage`). 
+2. the desired software components (e.g., a `nodejs` software component is deployed on the `Compute` node, a `mongodb`
+software component is deployed on the `Compute_2` node). Here users can control the lifecycle of the software components
+(i.e., how they are installed, updated, deleted) with ansible, python, and shell script.
+3. the relationships between the software components (e.g., a `nodecellar` web application connects to the `mongodb`
+runtime endpoint on port 27017).
+Here users can configure the `nodecellar` and `mongodb` node to setup the relationship with ansible, python, and shell
+script.
+
+At runtime, the TOSCA orchestration engine can read the topology description and deploy their applications accordingly.
+
+![](images/topology_example.png "TOSCA example")
+
+Figure 1: TOSCA example
+
+The following tutorial shows how users use TOSCA to do so.
 
 ## Basic
 1. [How to manage the lifecycle (create, update, delete) of a software component on a compute node?](tutorials/Basic_Lifecycle.md "Python example")
